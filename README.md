@@ -14,6 +14,13 @@ https://graphacademy.neo4j.com/courses/neo4j-fundamentals/
 
 
 # basic CQL structure
+CREATE (n:Label {property: value})
+MATCH (a:Label1), (b:Label2)
+CREATE (a)-[r:RELATIONSHIP_TYPE]->(b)
+MATCH (n:Label)
+WHERE n.property = value
+RETURN n
+
 
 # create index
 
