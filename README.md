@@ -30,8 +30,8 @@ MATCH (p:Person)
 WHERE p.age > 24
 RETURN p.name, p.age
 
-MATCH (p:Person {name: 'John Doe'})
-SET p.age = 31
+MATCH (p:Person {name: 'Alex Joe'})
+SET p.age = 24
 RETURN p
 
 # create index
