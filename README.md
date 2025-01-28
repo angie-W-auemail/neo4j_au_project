@@ -14,10 +14,10 @@ https://graphacademy.neo4j.com/courses/neo4j-fundamentals/
 
 
 # basic CQL structure
-CREATE (n:Label {property: value})
-MATCH (a:Label1), (b:Label2)
-WHERE n.property = value
-RETURN n
+CREATE (n:Label {property: value});
+MATCH (a:Label1), (b:Label2);
+WHERE n.property = value;
+RETURN n;
 
 CREATE (n:Person)
 CREATE (n:Person {
