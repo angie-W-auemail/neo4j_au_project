@@ -12,6 +12,11 @@ https://youtu.be/_IgbB24scLI?si=jHdiTSHtJvjfTNRn
 official lesson
 https://graphacademy.neo4j.com/courses/neo4j-fundamentals/
 
+sandbox test databases
+https://neo4j.com/docs/getting-started/appendix/example-data/
+
+getting started with movies test db and basic sample CQL code to retreive data
+https://neo4j.com/developer-blog/getting-started-with-play-movies/
 
 # basic CQL structure
 CREATE (n:Label {property: value});
