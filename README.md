@@ -18,6 +18,15 @@ https://neo4j.com/docs/getting-started/appendix/example-data/
 getting started with movies test db and basic sample CQL code to retreive data
 https://neo4j.com/developer-blog/getting-started-with-play-movies/
 
+basic queries guide
+https://neo4j.com/docs/cypher-manual/current/queries/basic/
+
+alter database queries
+https://neo4j.com/docs/operations-manual/current/database-administration/standard-databases/alter-databases/
+
+index guide
+https://neo4j.com/docs/cypher-manual/current/indexes/search-performance-indexes/managing-indexes/?utm_source=GSearch&utm_medium=PaidSearch&utm_campaign=Evergreen&utm_content=AMS-Search-SEMCE-DSA-None-SEM-SEM-NonABM&utm_term=&utm_adgroup=DSA&gad_source=1&gclid=CjwKCAiAneK8BhAVEiwAoy2HYY7l_YuVAVgQqAdsN7hiBkWqBPir55lYzqYpTNCj6AP7liSlPdYhphoCXbkQAvD_BwE
+
 # basic CQL structure
 CREATE (n:Label {property: value});
 MATCH (a:Label1), (b:Label2);
