@@ -27,7 +27,11 @@ https://neo4j.com/docs/operations-manual/current/database-administration/standar
 index guide
 https://neo4j.com/docs/cypher-manual/current/indexes/search-performance-indexes/managing-indexes/?utm_source=GSearch&utm_medium=PaidSearch&utm_campaign=Evergreen&utm_content=AMS-Search-SEMCE-DSA-None-SEM-SEM-NonABM&utm_term=&utm_adgroup=DSA&gad_source=1&gclid=CjwKCAiAneK8BhAVEiwAoy2HYY7l_YuVAVgQqAdsN7hiBkWqBPir55lYzqYpTNCj6AP7liSlPdYhphoCXbkQAvD_BwE
 
+connecting neo4j to react
+https://medium.com/neo4j/connecting-to-react-app-to-neo4j-148881d838b8
+
 # basic CQL structure
+create database:
 CREATE (n:Label {property: value});
 MATCH (a:Label1), (b:Label2);
 WHERE n.property = value;
@@ -40,6 +44,7 @@ CREATE (n:Person {
     email: 'Alex@123.com'
 })
 
+search on property:
 MATCH (p:Person)
 WHERE p.age > 24
 RETURN p.name, p.age
@@ -50,4 +55,48 @@ RETURN p
 
 # create index
 
+range index
+CREATE INDEX node_range_index_name IF NOT EXISTS FOR (n:Person) ON (n.surname)
+
+CREATE INDEX composite_range_node_index_name FOR (n:Person) ON (n.age, n.country)
+
+text index:
+CREATE TEXT INDEX node_text_index_nickname FOR (n:Person) ON (n.nickname)
+
+CREATE TEXT INDEX rel_text_index_name FOR ()-[r:KNOWS]-() ON (r.interest)
+
+point index:
+CREATE POINT INDEX node_point_index_name FOR (n:Person) ON (n.sublocation)
+
+CREATE POINT INDEX rel_point_index_name FOR ()-[r:STREET]-() ON (r.intersection)
+
+**lookup index**:
+Two token lookup indexes are created by default when creating a Neo4j database (one node label lookup index and one relationship type lookup index). Only one node label and one relationship type lookup index can exist at the same time. If a token lookup index has been deleted, it can be recreated with the CREATE LOOKUP INDEX command. Note that the index name must be unique.
+
+CREATE LOOKUP INDEX node_label_lookup_index FOR (n) ON EACH labels(n)
+
+CREATE LOOKUP INDEX rel_type_lookup_index FOR ()-[r]-() ON EACH type(r)
+
 # connecting to neo4j db
+import { Neo4jProvider, createDriver } from 'use-neo4j'
+// Create driver instance
+const driver = createDriver('neo4j', 'localhost', 7687, 'neo4j', 'letmein')
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Neo4jProvider 
+      scheme="neo4j+s"
+      host="myauradb.neo4j.io"
+      port="7687"
+      username="username"
+      password="defaultpassword" 
+      database="someotherdb"
+     >
+      <App />
+    </Neo4jProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+read this page for more details:
+https://medium.com/neo4j/connecting-to-react-app-to-neo4j-148881d838b8
