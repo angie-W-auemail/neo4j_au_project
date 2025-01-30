@@ -62,11 +62,13 @@ CREATE INDEX node_range_index_name IF NOT EXISTS FOR (n:Person) ON (n.surname)
 CREATE INDEX composite_range_node_index_name FOR (n:Person) ON (n.age, n.country)
 
 text index:
+
 CREATE TEXT INDEX node_text_index_nickname FOR (n:Person) ON (n.nickname)
 
 CREATE TEXT INDEX rel_text_index_name FOR ()-[r:KNOWS]-() ON (r.interest)
 
 point index:
+
 CREATE POINT INDEX node_point_index_name FOR (n:Person) ON (n.sublocation)
 
 CREATE POINT INDEX rel_point_index_name FOR ()-[r:STREET]-() ON (r.intersection)
