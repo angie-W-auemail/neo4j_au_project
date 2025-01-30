@@ -56,25 +56,23 @@ RETURN p
 # create index
 
 range index
-CREATE INDEX node_range_index_name IF NOT EXISTS FOR (n:Person) ON (n.surname)
 
+CREATE INDEX node_range_index_name IF NOT EXISTS FOR (n:Person) ON (n.surname)
 CREATE INDEX composite_range_node_index_name FOR (n:Person) ON (n.age, n.country)
 
 text index:
 CREATE TEXT INDEX node_text_index_nickname FOR (n:Person) ON (n.nickname)
-
 CREATE TEXT INDEX rel_text_index_name FOR ()-[r:KNOWS]-() ON (r.interest)
 
 point index:
 CREATE POINT INDEX node_point_index_name FOR (n:Person) ON (n.sublocation)
-
 CREATE POINT INDEX rel_point_index_name FOR ()-[r:STREET]-() ON (r.intersection)
 
 **lookup index**:
+
 Two token lookup indexes are created by default when creating a Neo4j database (one node label lookup index and one relationship type lookup index). Only one node label and one relationship type lookup index can exist at the same time. If a token lookup index has been deleted, it can be recreated with the CREATE LOOKUP INDEX command. Note that the index name must be unique.
 
 CREATE LOOKUP INDEX node_label_lookup_index FOR (n) ON EACH labels(n)
-
 CREATE LOOKUP INDEX rel_type_lookup_index FOR ()-[r]-() ON EACH type(r)
 
 # connecting to neo4j db
