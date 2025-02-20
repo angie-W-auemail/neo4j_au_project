@@ -105,5 +105,5 @@ ReactDOM.render(
 read this page for more details:
 https://medium.com/neo4j/connecting-to-react-app-to-neo4j-148881d838b8
 
-#cora project import graph to Neo4j NODES
+# Cora project import graph to Neo4j NODES
 https://stellargraph.readthedocs.io/en/stable/demos/connector/neo4j/load-cora-into-neo4j.html
