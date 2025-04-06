@@ -1,0 +1,215 @@
+:history
+
+MATCH (p:Paper)-[r:CITES]->(cited)
+WHERE p.subject = 'Neural_Networks'
+RETURN p, r, cited
+LIMIT 30;
+
+MATCH (p:Paper)
+RETURN p.subject AS Category, count(*) AS Count
+ORDER BY Count DESC;
+
+MATCH (p:Paper)
+RETURN count(p) AS TotalPapers;
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+WITH p ORDER BY p.betweenness DESC LIMIT 1
+MATCH path = (p)-[:CITES*1..2]-(neighbor)
+RETURN path
+LIMIT 100;
+
+MATCH (source:Paper)
+WHERE source.closeness > 0.8  
+WITH source LIMIT 1
+MATCH path = (source)-[:CITES*1..3]->(cited)
+RETURN path;
+
+MATCH (p:Paper)-[r:CITES]->(cited)
+WHERE rand() < 0.1  
+RETURN p, r, cited
+LIMIT 300;
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+WITH p ORDER BY p.betweenness DESC LIMIT 15
+MATCH path = (p)-[:CITES]-()
+RETURN path;
+
+MATCH (p:Paper)
+WHERE p.predictedClass IS NOT NULL
+RETURN 
+  p.subject AS TrueCategory, 
+  p.predictedClass AS PredictedCategory,
+  count(*) AS Count
+ORDER BY Count DESC
+LIMIT 20;
+
+MATCH (p:Paper)
+WHERE p.predictedClass IS NOT NULL
+WITH p.subject AS Category, 
+     count(*) AS Total,
+     sum(CASE WHEN p.subject = p.predictedClass THEN 1 ELSE 0 END) AS Correct
+RETURN 
+  Category,
+  Correct AS CorrectlyClassified,
+  Total AS TotalPapers,
+  round(1000.0*Correct/Total)/1000.0 AS Accuracy
+ORDER BY Accuracy DESC;
+
+MATCH (p:Paper)
+WHERE p.predictedClass IS NOT NULL
+WITH 
+  count(*) AS total,
+  sum(CASE WHEN p.subject = p.predictedClass THEN 1 ELSE 0 END) AS correct
+RETURN 
+  correct AS CorrectlyClassified, 
+  total AS TotalClassified,
+  round(1000.0*correct/total)/1000.0 AS Accuracy;
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+RETURN 
+  p.subject AS Category,
+  round(avg(p.betweenness)*1000)/1000 AS AvgBetweenness,
+  round(max(p.betweenness)*1000)/1000 AS MaxBetweenness,
+  count(*) AS PaperCount
+ORDER BY AvgBetweenness DESC;
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+RETURN 
+  p.nodeId AS PaperId,
+  p.subject AS Category,
+  p.betweenness AS BetweennessCentrality
+ORDER BY p.betweenness DESC
+LIMIT 10;
+
+MATCH (p:Paper)-[r:CITES]->(cited)
+WHERE p.subject = 'Neural_Networks'
+RETURN p, r, cited
+LIMIT 30;
+
+MATCH (p:Paper)
+WHERE p.predictedClass IS NOT NULL
+RETURN 
+  p.subject AS TrueCategory, 
+  p.predictedClass AS PredictedCategory,
+  count(*) AS Count
+ORDER BY Count DESC
+LIMIT 20;
+
+MATCH (p:Paper)
+WHERE p.predictedClass IS NOT NULL
+WITH p.subject AS Category, 
+     count(*) AS Total,
+     sum(CASE WHEN p.subject = p.predictedClass THEN 1 ELSE 0 END) AS Correct
+RETURN 
+  Category,
+  Correct AS CorrectlyClassified,
+  Total AS TotalPapers,
+  round(1000.0*Correct/Total)/1000.0 AS Accuracy
+ORDER BY Accuracy DESC;
+
+MATCH (p:Paper)
+WHERE p.predictedClass IS NOT NULL
+WITH 
+  count(*) AS total,
+  sum(CASE WHEN p.subject = p.predictedClass THEN 1 ELSE 0 END) AS correct
+RETURN 
+  correct AS CorrectlyClassified, 
+  total AS TotalClassified,
+  round(1000.0*correct/total)/1000.0 AS Accuracy;
+
+MATCH (p:Paper)
+WITH p.community AS community, p.subject AS subject, count(*) AS cnt
+ORDER BY community, cnt DESC
+WITH community, collect({subject: subject, cnt: cnt})[0].subject AS dominantCategory
+MATCH (p:Paper)
+WHERE p.community = community
+SET p.predictedClass = dominantCategory;
+
+CALL gds.louvain.write(
+  'paper_graph',
+  {
+    writeProperty: 'community'
+  }
+);
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+WITH p ORDER BY p.betweenness DESC LIMIT 15
+MATCH path = (p)-[:CITES]-()
+RETURN path;
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+RETURN 
+  p.subject AS Category,
+  round(avg(p.betweenness)*1000)/1000 AS AvgBetweenness,
+  round(max(p.betweenness)*1000)/1000 AS MaxBetweenness,
+  count(*) AS PaperCount
+ORDER BY AvgBetweenness DESC;
+
+MATCH (p:Paper)
+WHERE p.betweenness IS NOT NULL
+RETURN 
+  p.nodeId AS PaperId,
+  p.subject AS Category,
+  p.betweenness AS BetweennessCentrality
+ORDER BY p.betweenness DESC
+LIMIT 10;
+
+CALL gds.betweenness.write(
+  'paper_graph',
+  {
+    writeProperty: 'betweenness'
+  }
+)
+YIELD nodePropertiesWritten, computeMillis;
+
+CALL gds.graph.project(
+  'paper_graph',
+  'Paper',
+  'CITES'
+);
+
+MATCH (p:Paper)
+WHERE p.subject IN ['Neural_Networks', 'Theory'] 
+  AND p.closeness > 0.5  
+WITH p LIMIT 20
+MATCH path = (p)-[:CITES]->(cited)
+RETURN path;
+
+MATCH (p:Paper)
+WHERE p.closeness IS NOT NULL
+RETURN 
+  p.subject AS Category,
+  round(avg(p.closeness)*1000)/1000 AS AvgCloseness,
+  round(max(p.closeness)*1000)/1000 AS MaxCloseness,
+  count(*) AS PaperCount
+ORDER BY AvgCloseness DESC;
+
+MATCH (p:Paper)-[r:CITES]->(cited)
+WHERE p.subject = 'Neural_Networks'
+RETURN p, r, cited
+LIMIT 30;
+
+MATCH (p:Paper)
+RETURN p.subject AS Category, count(*) AS Count
+ORDER BY Count DESC;
+
+MATCH (p:Paper)
+RETURN count(p) AS TotalPapers;
+
+MATCH (p:Paper)
+WITH count(*) AS total,
+     count(p.predictedClass) AS classified,
+     sum(CASE WHEN p.subject = p.predictedClass THEN 1 ELSE 0 END) AS correct
+RETURN 
+  total, 
+  classified, 
+  toFloat(classified)/total AS coverage,
+  correct,
+  toFloat(correct)/classified AS accuracy_classified,
+  toFloat(correct)/total AS accuracy_total;
